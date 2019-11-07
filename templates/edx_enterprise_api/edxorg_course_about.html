@@ -1,0 +1,108 @@
+<%namespace name='static' file='../static_content.html'/>
+<%!
+import datetime
+from django.utils.translation import ugettext as _
+from django.core.urlresolvers import reverse
+%>
+<%inherit file="../main.html" />
+<%block name="headextra">
+  ## OG (Open Graph) title and description added below to give social media info to display
+  ## (https://developers.facebook.com/docs/opengraph/howtos/maximizing-distribution-media-content#tags)
+  <meta property="og:title" content="${title}" />
+</%block>
+
+<%block name="pagetitle">${title}</%block>
+<style type="text/css">
+  /* Outer */
+
+</style>
+<section class="course-info">
+  <header class="course-profile">
+    <div class="intro-inner-wrapper">
+      <div class="table">
+      <section class="intro">
+        <div class="heading-group">
+          <h1>
+            ${title}
+          </h1>
+        </div>
+        <div class="main-cta">
+    %if is_course_available:
+            
+            <a href=${course_marketing_url} class="register request-btn">
+              Join course ${title}
+           
+    %else:
+              <span class="register disabled">This course is not available</span>
+    %endif
+          <div id="register_error"></div>
+        </div>
+      </section>
+      <div class="media">
+        <div class="hero">
+          <img src="${context['card_image_url']}" height=200px alt="" />
+        </div>
+      </div>
+    </div>
+      </div>
+  </header>
+
+  <div class="container">
+    <div class="details">
+      <div class="inner-wrapper">
+        <section class="about">
+          <h2 style="margin-top: 0px;">About This Course</h2>
+          <p>${full_description}</p>
+        </section>
+      </div>
+    </div>
+    <div class="course-sidebar">
+      <div class="course-summary">
+        <ol class="important-dates">
+          <li class="important-dates-item"><span class="icon fa fa-info-circle" aria-hidden="true"></span><p class="important-dates-item-title">${_("Course Number")}</p><span class="important-dates-item-text course-number">${course_number}</span></li>
+          <li class="important-dates-item"><span class="icon fa fa-info-circle" aria-hidden="true"></span><p class="important-dates-item-title">${_("Course Organization")}</p><span class="important-dates-item-text course-number">${org}</span></li>
+          <li class="important-dates-item"><span class="icon fa fa-info-circle" aria-hidden="true"></span><p class="important-dates-item-title">${_("Language")}</p><span class="important-dates-item-text course-number">${LANGUAGE_CODE}</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="popup" data-popup="popup-1">
+    <div class="popup-inner">
+      <p>Dear Learner,</p>
+      <p>Thank You for showing your interest in the enrolment of the Course.</p>
+      <p>edX have two modes of enrolling:</p>
+      <p>•     Audit - No approval required</p>
+      <p>•     Certification – The approval required from manager (M5 and above) along with his recommendation and HRBP.</p>
+      <p>Please send the approval email to wisdomwizard@sterlite.com for initiating certification course.</p>
+      <p><a class="con-btn" data-popup-okay="popup-1" href="${enroll_url}"><button class="btn-ok">Okay</button></a></p>
+      <a class="popup-close" data-popup-close="popup-1" href="#">x</a>
+    </div>
+  </div>
+</section>
+<script type="text/javascript">
+  //$(function() {
+  $( document ).ready(function() {
+    $('[data-popup-okay]').on('click', function(e) {
+      var targeted_popup_class = jQuery(this).attr('data-popup-close');
+      $('[data-popup="' + targeted_popup_class + '"]').fadeOut(350);
+      window.location.href="${enroll_url}";
+
+      e.preventDefault();
+    });
+    $('[data-popup-close]').on('click', function(e) {
+      var targeted_popup_class = jQuery(this).attr('data-popup-close');
+      $('[data-popup="' + targeted_popup_class + '"]').fadeOut(350);
+
+      e.preventDefault();
+    });
+
+  });
+  $('.enroll-btn').click(function(e){
+        var targeted_popup_class = jQuery(this).attr('data-popup-open');
+        $('[data-popup="' + targeted_popup_class + '"]').fadeIn(350);
+
+        e.preventDefault();
+    }); 
+</script>
