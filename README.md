@@ -49,7 +49,7 @@ enterprise LMS or another system.
     ```python
     url(r'', include('openedx.features.edx_enterprise_api.urls')),
     ```
-7.  Replace only third line in /lms/templates/discovery/course\_card.underscore:
+7.  Replace only below line in /lms/templates/discovery/course\_card.underscore:
     ```html
     <a href="/courses/<%- course %>/about">
     ```
