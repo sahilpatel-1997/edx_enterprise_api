@@ -9,9 +9,9 @@ log = logging.getLogger(__name__)
 
 class Command(BaseCommand):
 
-	def handle(self, *args, **options):
-		try:
-			edx_courses = EdxorgCourses()
-			edx_courses.set_edxorg_courses()
-		except Exception as e:
-			log.error(e)
+    def handle(self, *args, **options):
+        try:
+            edx_courses = EdxorgCourses()
+            edx_courses.set_edxorg_courses()
+        except Exception as e:
+            log.error(e)
