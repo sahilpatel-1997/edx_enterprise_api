@@ -17,7 +17,7 @@ enterprise LMS or another system.
 
 1.  Put edx_enterprise_api app to edx-platform -&gt; openedx -&gt; features
 
-2.  Add json config file:
+2.  Add in to json config file (i.e in lms.env.json):
     ```python
     'EDX_ENTERPRISE_API_CLIENT_ID': " Your edX Enterprise Client Id",
     'EDX_ENTERPRISE_API_CLIENT_SECRET': "Your edX Enterprise Client Secret",
@@ -27,13 +27,16 @@ enterprise LMS or another system.
     ```
 3.  Add in to the settings file (i.e. in edx-platform/lms/envs/common.py):
     ```python
-    INSTALLED_APPS += ('edx_enterprise_api',)
-    MAKO_TEMPLATE_DIRS_BASE +=[OPENEDX_ROOT / 'features' / 'edx_enterprise_api']
+    INSTALLED_APPS += ('openedx.features.edx_enterprise_api',)
+    MAKO_TEMPLATE_DIRS_BASE +=[OPENEDX_ROOT / 'features' / 'edx_enterprise_api' / 'templates']
+    ```
+4. Make sure below flag are True in settings file:
+    ```python
     'ENABLE_COURSE_DISCOVERY': True
     'ENABLE_COURSEWARE_SEARCH': True
     ```
     
-4.  Add to aws config file (i.e in edx-platform/lms/envs/aws.py)
+5.  Add to aws config file (i.e in edx-platform/lms/envs/aws.py)
     ```python
     ################ EDX ENTERPRISE TOKENS  #############################
     EDX_ENTERPRISE_API_CLIENT_ID = ENV_TOKENS.get('EDX_ENTERPRISE_API_CLIENT_ID', "EDX_ENTERPRISE_API_CLIENT_ID")
@@ -42,11 +45,15 @@ enterprise LMS or another system.
     EDX_ENTERPRISE_CLIENT_CATALOG_DETAIL_API = ENV_TOKENS.get('EDX_ENTERPRISE_CLIENT_CATALOG_DETAIL_API', "EDX_ENTERPRISE_CLIENT_CATALOG_DETAIL_API")
     EDX_ENTERPRISE_COURSE_DETAIL_API = ENV_TOKENS.get('EDX_ENTERPRISE_COURSE_DETAIL_API', "EDX_ENTERPRISE_COURSE_DETAIL_API")
     ```  
-5.  Add to LMS URLs (i.e. in edx-platform/lms/urls.py):
+6.  Add to LMS URLs (i.e. in edx-platform/lms/urls.py):
     ```python
     url(r'', include('openedx.features.edx_enterprise_api.urls')),
     ```
-6.  In /lms/templates/discovery/course\_card.underscore change second line as below
+7.  Replace only below line in /lms/templates/discovery/course\_card.underscore:
+    ```html
+    <a href="/courses/<%- course %>/about">
+    ```
+    to
     ```html
     <% if (org == 'edX Courses') { %>
         <a href="/courses/<%- course %>/course_about">
@@ -55,9 +62,9 @@ enterprise LMS or another system.
     <% } %>
     ```
 
-7. Apply migration
+8. Apply migration
 
-8. Run in the console:
+9. Run in the console:
     ```bash
     sudo -H -u edxapp bash
     source ~/edxapp_env 
